@@ -8,7 +8,13 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 WORKDIR /app
 
 # Copy the application JAR file
-COPY target/*.jar /app/app.jar
+COPY *.jar /app/app.jar
+
+# Install tzdata and set the timezone in a single RUN statement
+RUN apk --no-cache add tzdata && \
+    cp /usr/share/zoneinfo/Asia/Colombo /etc/localtime && \
+    echo "Asia/Colombo" > /etc/timezone && \
+    apk del tzdata
 
 #set log path previlages
 RUN mkdir -p /logs
